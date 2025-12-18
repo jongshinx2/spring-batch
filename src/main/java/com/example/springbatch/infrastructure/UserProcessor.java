@@ -11,7 +11,6 @@ public class UserProcessor implements ItemProcessor<User, User> {
     public User process(User user) throws Exception {
         // Example processing: Convert the user's name to uppercase
         user.setEmail(user.getEmail().toLowerCase());
-        user.setProcessed(true);
 
         log.info("Processing user: {}", user.getName());
         return user;

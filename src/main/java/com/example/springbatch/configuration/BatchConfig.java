@@ -24,7 +24,6 @@ import org.springframework.context.annotation.Configuration;
 
 @RequiredArgsConstructor
 @Configuration
-//@EnableBatchProcessing
 public class BatchConfig {
 
     private final JobRepository jobRepository;
@@ -41,7 +40,6 @@ public class BatchConfig {
     }
 
     @Bean
-    @JobScope
     public Step userProcessingstep(ItemReader<User> reader,
                                    ItemProcessor<User, User> processor,
                                    ItemWriter<User> writer) {
@@ -54,24 +52,21 @@ public class BatchConfig {
     }
 
     @Bean
-    @StepScope
     public JpaPagingItemReader<User> reader() {
         return new JpaPagingItemReaderBuilder<User>()
                 .name("userReader")
                 .entityManagerFactory(entityManagerFactory)
-                .queryString("SELECT u FROM User u WHERE u.processed = false")
+                .queryString("SELECT u FROM User u")
                 .pageSize(10)
                 .build();
     }
 
     @Bean
-    @StepScope
     public UserProcessor processor() {
         return new UserProcessor();
     }
 
     @Bean
-    @StepScope
     public JpaItemWriter<User> writer() {
         return new JpaItemWriter<>(entityManagerFactory);
     }
